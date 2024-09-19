@@ -1,15 +1,18 @@
 let listaNombresGastos = [];
 let listaValoresGastos = [];
+let listaDescripciones = [];
 
 function clickBoton(){
     let nombreGasto = document.getElementById('nombreGasto').value;
     let valorGasto = document.getElementById('valorGasto').value;
+    let descripcion = document.getElementById('descripcion').value;
     
     listaNombresGastos.push(nombreGasto);
     listaValoresGastos.push(valorGasto);
+    listaDescripciones.push(descripcion);
 
     actualizarListaGastos();
-    
+    mensaje(valorGasto);
 }
 
 function actualizarListaGastos(){
@@ -24,10 +27,12 @@ function actualizarListaGastos(){
     //metodo para recorrer los arreglos, igual al for pero este es especial para los arreglos
     listaNombresGastos.forEach((elemento, posicion) => {
         const valorGasto = Number(listaValoresGastos[posicion]); // number para convertir la lista de valores de gastos a numeros
+        const mostrarDescripcion = listaDescripciones[posicion];
         
         //las comillas `` son para evitar concatenaciones, si quiero brindar las varibales me toca ponerlas entre ${variable}
-        htmlLista  += `<li>${elemento} - USD ${valorGasto.toFixed(2)} 
-                       <button id="" onclick="eliminar(${posicion});">Eliminar</button>
+        htmlLista  += `<li>${elemento} - USD ${valorGasto.toFixed(2)} - <textarea rows="1" cols="5">${mostrarDescripcion}</textarea>
+                       <button id="" onclick="mensajeConfirmacionEliminar(${posicion});">Eliminar</button>
+                       <button id="" onclick="editar(${posicion});">Editar</button>
                         </li>`; // utilizamos igual el ${variable} para que se identifique el argumento que mandamos a la funcion que esta esperando el parametro y recoradar que el .tofixed es para determinar la cantidad de decimales que quiero
         
         //calculamos el total de los gastos, y utilizamos la funcion Number porque pueden ser enteros o con decimales, por lo que la funcion solo convierte el string a un numero
@@ -39,11 +44,13 @@ function actualizarListaGastos(){
     limpiar();
 }
 
+//funcion que se ejecuta despues de haber anadido un gasto
 function limpiar(){
     document.getElementById('nombreGasto').value = '';
     document.getElementById('valorGasto').value = '';
 }
 
+//funcion para eliminar el gasto
 function eliminar(posicion){
     console.log(posicion);
     //splice elimina segun la posicion que se le brinda y pide la cantidad por lo que se brinda solo uno
@@ -53,7 +60,72 @@ function eliminar(posicion){
     actualizarListaGastos();
 }
 
+//primero se ejecuta esto para evitar que se elimine sin querer un gasto
+function mensajeConfirmacionEliminar(posicion){
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-success btn-espacio",
+          cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: "¿Desea eliminar el gasto?",
+        text: "Si lo elimina no volvera a aparecer en pantalla",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Elimnar",
+        cancelButtonText: "Cancelar",
+        reverseButtons: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+            eliminar(posicion);
+          swalWithBootstrapButtons.fire({
+            title: "¡Eliminado!",
+            text: "Registro eliminado exitosamente",
+            icon: "success",
+          });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: "¡Cancelado!",
+            text: "No se ha eliminado el registro",
+            icon: "Warning"
+          });
+        }
+      });
+}
+
+
+//funcion que emite alerta de si el gasto es mayor o no de $150, de igual forma lo almacena porque es lo deseado
+function mensaje(gasto){
+    let valor = Number(gasto);
+    if(gasto > 150){
+        Swal.fire({
+            position: "top-end",
+            icon: "warning",
+            title: "Se ha registrado exitosamente, pero pon atención, el gasto es mayor a $150",
+            showConfirmButton: false,
+            timer: 3000
+          });
+    }else{
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Se registro exitosamente",
+            showConfirmButton: false,
+            timer: 2500
+          });
+    }
+}
+
+
+//funcion que edita el toda la informacion anadida del gasto
+function editar(posicion){
+    
+}
+
 /*desafios a relizar
-Generar un mensaje de alerta cuando se registre un gasto mayor a 150$ dólares.
-Agregar un nuevo campo donde se pueda colocar una descripción más detallada del gasto.
 Agregar un botón que permita modificar los gastos registrados.*/

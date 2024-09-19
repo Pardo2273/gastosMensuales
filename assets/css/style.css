@@ -106,5 +106,8 @@ ul li:last-child {
     font-size: 24px;
     text-align: center;
     color: #fff;
+}
 
+.btn-espacio{ /*este es para los botones del sweet alert porque suelen verse pegados*/
+    margin: 20px;
 }

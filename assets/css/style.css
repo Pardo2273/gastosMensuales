@@ -50,7 +50,7 @@ ul li {
     background-color: #041832;
     border-bottom: 1px solid #eee;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 ul li:last-child {
@@ -110,4 +110,8 @@ ul li:last-child {
 
 .btn-espacio{ /*este es para los botones del sweet alert porque suelen verse pegados*/
     margin: 20px;
+}
+
+.li[input]{
+    width: 300px;
 }

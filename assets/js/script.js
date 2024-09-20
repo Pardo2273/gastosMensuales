@@ -30,9 +30,9 @@ function actualizarListaGastos(){
         const mostrarDescripcion = listaDescripciones[posicion];
         
         //las comillas `` son para evitar concatenaciones, si quiero brindar las varibales me toca ponerlas entre ${variable}
-        htmlLista  += `<li>${elemento} - USD ${valorGasto.toFixed(2)} - <textarea rows="1" cols="5">${mostrarDescripcion}</textarea>
-                       <button id="" onclick="mensajeConfirmacionEliminar(${posicion});">Eliminar</button>
-                       <button type="button" onclick="mostrarElementos(${posicion})" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Editar</button>
+        htmlLista  += `<li>${elemento} - USD ${valorGasto.toFixed(2)} - Descripción: ${mostrarDescripcion}
+                       <button style="margin: auto 10px" onclick="mensajeConfirmacionEliminar(${posicion});">Eliminar</button>
+                       <button style="margin: auto 10px" type="button" onclick="mostrarElementos(${posicion})" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Editar</button>
                         </li>`; // utilizamos igual el ${variable} para que se identifique el argumento que mandamos a la funcion que esta esperando el parametro y recoradar que el .tofixed es para determinar la cantidad de decimales que quiero
         
         //calculamos el total de los gastos, y utilizamos la funcion Number porque pueden ser enteros o con decimales, por lo que la funcion solo convierte el string a un numero

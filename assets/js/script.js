@@ -32,7 +32,7 @@ function actualizarListaGastos(){
         //las comillas `` son para evitar concatenaciones, si quiero brindar las varibales me toca ponerlas entre ${variable}
         htmlLista  += `<li>${elemento} - USD ${valorGasto.toFixed(2)} - <textarea rows="1" cols="5">${mostrarDescripcion}</textarea>
                        <button id="" onclick="mensajeConfirmacionEliminar(${posicion});">Eliminar</button>
-                       <button id="" onclick="editar(${posicion});">Editar</button>
+                       <button type="button" onclick="mostrarElementos(${posicion})" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Editar</button>
                         </li>`; // utilizamos igual el ${variable} para que se identifique el argumento que mandamos a la funcion que esta esperando el parametro y recoradar que el .tofixed es para determinar la cantidad de decimales que quiero
         
         //calculamos el total de los gastos, y utilizamos la funcion Number porque pueden ser enteros o con decimales, por lo que la funcion solo convierte el string a un numero
@@ -48,6 +48,7 @@ function actualizarListaGastos(){
 function limpiar(){
     document.getElementById('nombreGasto').value = '';
     document.getElementById('valorGasto').value = '';
+    document.getElementById('descripcion').value = '';
 }
 
 //funcion para eliminar el gasto
@@ -102,11 +103,11 @@ function mensajeConfirmacionEliminar(posicion){
 //funcion que emite alerta de si el gasto es mayor o no de $150, de igual forma lo almacena porque es lo deseado
 function mensaje(gasto){
     let valor = Number(gasto);
-    if(gasto > 150){
+    if(valor > 150){
         Swal.fire({
             position: "top-end",
             icon: "warning",
-            title: "Se ha registrado exitosamente, pero pon atención, el gasto es mayor a $150",
+            title: "Se ha registrado exitosamente, pero atención, el gasto es mayor a $150",
             showConfirmButton: false,
             timer: 3000
           });
@@ -121,11 +122,21 @@ function mensaje(gasto){
     }
 }
 
-
-//funcion que edita el toda la informacion anadida del gasto
-function editar(posicion){
-    
+//esto es para mostrar el elemento de cada uno del arreglo
+function mostrarElementos(posicion){
+    document.getElementById('posicionArreglo').value = posicion; //ojo que cambie nombres para evitar equivocarme pero siempre hace referencia a la posicion
+    document.getElementById('modalNombreGasto').value = listaNombresGastos[posicion];
+    document.getElementById('modalValorGasto').value = listaValoresGastos[posicion];
+    document.getElementById('modalDescripcion').value = listaDescripciones[posicion];
 }
 
-/*desafios a relizar
-Agregar un botón que permita modificar los gastos registrados.*/
+
+//funcion que edita el toda la informacion anadida del gasto
+function editar(){
+    let valor = document.getElementById('posicionArreglo').value;
+    let posicion = Number(valor);
+    listaNombresGastos[posicion] = document.getElementById('modalNombreGasto').value;
+    listaValoresGastos[posicion] = document.getElementById('modalValorGasto').value;
+    listaDescripciones[posicion] = document.getElementById('modalDescripcion').value;
+    actualizarListaGastos();
+}
